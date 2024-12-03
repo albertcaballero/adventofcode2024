@@ -1,5 +1,4 @@
-def check_valid(line):
-	bad = 0
+def check_inc(line):
 	inc = True
 	c = 0
 	for a in range(len(line) - 1):
@@ -11,30 +10,36 @@ def check_valid(line):
 			c -= 1
 	if c > 0:
 		inc = False
+	return inc
+
+def loop_shit(cpy, inc):
 	i = 0
-	while i < len(line) - 1:
-		if line[i] == line[i+1]:
-			bad += 1
-		elif line[i] > line[i+1] and inc:
-			bad += 1
-		elif line[i] < line[i+1] and not inc:
-			bad += 1
-		elif abs(line[i] - line[i+1]) > 3:
-			bad += 1
-		if bad == 1:
-			line.pop(i+1)
+	while i < len(cpy) - 1:
+		if cpy[i] == cpy[i+1]:
+			return 0
+		elif cpy[i] > cpy[i+1] and inc:
+			return 0
+		elif cpy[i] < cpy[i+1] and not inc:
+			return 0
+		elif abs(cpy[i] - cpy[i+1]) > 3:
+			return 0
 		i+=1
-	# print (bad)
-	if bad > 1:
-		return 0
 	return 1
+
+def check_valid(line):
+	inc = check_inc(line)
+	for j in range(len(line)):
+		cpy = line.copy()
+		cpy.pop(j)
+		if loop_shit(cpy, inc):
+			return 1
+	return 0
 
 
 
 with open("input.txt", "r") as data:
 	count = 0
 	for line in data:
-	# line = "61 68 69 71 72 79"
 		spl = line.split()
 		aux = [int(item) for item in spl]
 		count += check_valid(aux)
